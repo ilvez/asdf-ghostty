@@ -41,8 +41,7 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for ghostty
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="$GH_REPO/archive/refs/tags/v${version}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
