@@ -6,7 +6,7 @@ Testing Locally:
 asdf plugin test <plugin-name> <plugin-url> [--asdf-tool-version <version>] [--asdf-plugin-gitref <git-ref>] [test-command*]
 
 # TODO: adapt this
-asdf plugin test ghostty https://github.com/ilvez/asdf-ghostty.git "ghosty --version"
+asdf plugin test ghostty https://github.com/ilvez/asdf-ghostty.git "ghostty --version"
 ```
 
 Tests are automatically run in GitHub Actions on push and PR.
