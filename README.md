@@ -2,7 +2,7 @@
 
 # asdf-ghostty [![Build](https://github.com/ilvez/asdf-ghostty/actions/workflows/build.yml/badge.svg)](https://github.com/ilvez/asdf-ghostty/actions/workflows/build.yml) [![Lint](https://github.com/ilvez/asdf-ghostty/actions/workflows/lint.yml/badge.svg)](https://github.com/ilvez/asdf-ghostty/actions/workflows/lint.yml)
 
-[ghostty](https://ghostty.org/docs/) plugin for the [asdf version manager](https://asdf-vm.com).
+[ghostty](https://ghostty.org/) plugin for the [asdf version manager](https://asdf-vm.com).
 
 </div>
 
