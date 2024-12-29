@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for ghostty.
 GH_REPO="https://github.com/ghostty-org/ghostty/"
 TOOL_NAME="ghostty"
 TOOL_TEST="ghostty --version"
@@ -31,8 +30,6 @@ list_github_tags() {
 }
 
 list_all_versions() {
-  # TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-  # Change this function if ghostty has other means of determining installable versions.
   list_github_tags
 }
 
