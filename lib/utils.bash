@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for ghostty.
-GH_REPO="https://ghostty.org/"
+GH_REPO="https://github.com/ghostty-org/ghostty/"
 TOOL_NAME="ghostty"
 TOOL_TEST="ghosty --version"
 
