@@ -20,7 +20,9 @@ jobs:
         uses: mlugg/setup-zig@v1
         with:
           version: 0.13.0
-      - name: asdf_plugin_test
+      - name: install ghostty dependecies
+        run: sudo apt-get update && sudo apt-get install -y libgtk-4-dev libadwaita-1-dev
+      - name: run plugin test
         uses: asdf-vm/actions/plugin-test@v2
         with:
           command: ghostty --version
