@@ -58,7 +58,7 @@ install_version() {
   fi
 
   (
-    cd "$ASDF_DOWNLOAD_PATH" && zig build -Doptimize=ReleaseFast
+    cd "$ASDF_DOWNLOAD_PATH" && zig build -Doptimize=ReleaseFast -fsys=fontconfig
 
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/zig-out/* "$install_path"
