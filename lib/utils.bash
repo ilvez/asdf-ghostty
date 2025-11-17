@@ -40,6 +40,8 @@ download_release() {
 
   if [ "$version" == "tip" ]; then
     url="$GH_REPO/archive/refs/tags/${version}.tar.gz"
+  elif [ "$version" == "latest" ]; then
+    url="$GH_REPO/archive/refs/heads/main.tar.gz"
   else
     url="$GH_REPO/archive/refs/tags/v${version}.tar.gz"
   fi
