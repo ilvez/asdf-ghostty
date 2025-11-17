@@ -43,6 +43,16 @@ asdf global ghostty latest
 ghostty --version
 ```
 
+## Version Options
+
+- **Stable releases**: `asdf install ghostty 1.2.3`
+- **`latest`**: Resolves to the most recent stable release tag
+- **`tip`**: Installs from the `tip` tag (development snapshot)
+- **`ref:<reference>`**: Build from any git reference:
+  - Branch: `asdf install ghostty ref:main`
+  - Tag: `asdf install ghostty ref:v1.2.3`
+  - Commit: `asdf install ghostty ref:abc123`
+
 Check [asdf](https://github.com/asdf-vm/asdf) readme for more instructions on how to
 install & manage versions.
 

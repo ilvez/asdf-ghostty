@@ -34,25 +34,38 @@ list_all_versions() {
 }
 
 get_latest_version() {
-  list_github_tags | grep -v "^tip$" | sort_versions | tail -n1
+  list_github_tags | grep -v "^tip" | sort_versions | tail -n1
 }
 
 download_release() {
-  local version filename url
-  version="$1"
-  filename="$2"
+  local install_type="$1"
+  local version="$2"
+  local filename="$3"
+  local url
 
-  if [ "$version" == "latest" ]; then
-    version=$(get_latest_version)
-  fi
+  if [ "$install_type" == "version" ]; then
+    if [ "$version" == "latest" ]; then
+      version=$(get_latest_version)
+    fi
 
-  if [ "$version" == "tip" ]; then
-    url="$GH_REPO/archive/refs/tags/${version}.tar.gz"
+    if [ "$version" == "tip" ]; then
+      url="$GH_REPO/archive/refs/tags/${version}.tar.gz"
+    else
+      url="$GH_REPO/archive/refs/tags/v${version}.tar.gz"
+    fi
+  elif [ "$install_type" == "ref" ]; then
+    if [[ "$version" =~ ^v[0-9] ]]; then
+      url="$GH_REPO/archive/refs/tags/${version}.tar.gz"
+    elif git ls-remote --tags --refs "$GH_REPO" | grep -q "refs/tags/${version}$"; then
+      url="$GH_REPO/archive/refs/tags/${version}.tar.gz"
+    else
+      url="$GH_REPO/archive/${version}.tar.gz"
+    fi
   else
-    url="$GH_REPO/archive/refs/tags/v${version}.tar.gz"
+    fail "Unsupported install type: $install_type"
   fi
 
-  echo "* Downloading $TOOL_NAME release $version..."
+  echo "* Downloading $TOOL_NAME $install_type $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
@@ -61,8 +74,8 @@ install_version() {
   local version="$2"
   local install_path="$3"
 
-  if [ "$install_type" != "version" ]; then
-    fail "asdf-$TOOL_NAME supports release installs only"
+  if [ "$install_type" != "version" ] && [ "$install_type" != "ref" ]; then
+    fail "asdf-$TOOL_NAME supports version and ref installs only"
   fi
 
   (
