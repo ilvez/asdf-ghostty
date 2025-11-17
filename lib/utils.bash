@@ -33,10 +33,18 @@ list_all_versions() {
   list_github_tags
 }
 
+get_latest_version() {
+  list_github_tags | grep -v "^tip$" | sort_versions | tail -n1
+}
+
 download_release() {
   local version filename url
   version="$1"
   filename="$2"
+
+  if [ "$version" == "latest" ]; then
+    version=$(get_latest_version)
+  fi
 
   if [ "$version" == "tip" ]; then
     url="$GH_REPO/archive/refs/tags/${version}.tar.gz"
