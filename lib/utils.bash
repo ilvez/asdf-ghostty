@@ -117,13 +117,6 @@ install_version() {
     fail "asdf-$TOOL_NAME supports version and ref installs only"
   fi
 
-  local required_zig_version
-  required_zig_version=$(get_required_zig_version "$version")
-
-  if [ -n "$required_zig_version" ]; then
-    check_zig_version "$required_zig_version" "$version"
-  fi
-
   (
     cd "$ASDF_DOWNLOAD_PATH" && zig build -Doptimize=ReleaseFast -fsys=fontconfig
 

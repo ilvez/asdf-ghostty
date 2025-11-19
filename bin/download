@@ -10,6 +10,12 @@ source "${plugin_dir}/lib/utils.bash"
 
 mkdir -p "$ASDF_DOWNLOAD_PATH"
 
+# Check Zig version before downloading
+required_zig_version=$(get_required_zig_version "$ASDF_INSTALL_VERSION")
+if [ -n "$required_zig_version" ]; then
+  check_zig_version "$required_zig_version" "$ASDF_INSTALL_VERSION"
+fi
+
 # TODO: Adapt this to proper extension and adapt extracting strategy.
 release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION.tar.gz"
 
