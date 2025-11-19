@@ -57,7 +57,7 @@ check_zig_version() {
   local required_version="$1"
   local ghostty_version="$2"
 
-  if ! command -v zig &> /dev/null; then
+  if ! command -v zig &>/dev/null; then
     echo "⚠️  WARNING: Zig compiler not found. ghostty $ghostty_version requires Zig $required_version"
     echo "   See: https://ghostty.org/docs/install/build"
     return
