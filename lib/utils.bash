@@ -117,8 +117,11 @@ install_version() {
     fail "asdf-$TOOL_NAME supports version and ref installs only"
   fi
 
+  local build_options="${GHOSTTY_BUILD_OPTIONS:-}"
+  local default_options="-Doptimize=ReleaseFast -fsys=fontconfig"
+
   (
-    cd "$ASDF_DOWNLOAD_PATH" && zig build -Doptimize=ReleaseFast -fsys=fontconfig
+    cd "$ASDF_DOWNLOAD_PATH" && zig build $default_options $build_options
 
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/zig-out/* "$install_path"

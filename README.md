@@ -59,8 +59,19 @@ ghostty --version
   - Tag: `asdf install ghostty ref:v1.2.3`
   - Commit: `asdf install ghostty ref:abc123`
 
-Check [asdf](https://github.com/asdf-vm/asdf) readme for more instructions on how to
-install & manage versions.
+## Build Options
+
+You can customize the build by setting the `GHOSTTY_BUILD_OPTIONS` environment variable before installation:
+
+```shell
+# Example: Build with debug optimization and without themes:
+export GHOSTTY_BUILD_OPTIONS="-Doptimize=Debug -Demit-themes=false"
+asdf install ghostty 1.2.3
+```
+
+The plugin uses these default options: `-Doptimize=ReleaseFast -fsys=fontconfig`
+
+Your custom options are appended to the defaults. For available build options, see the [ghostty build documentation](https://ghostty.org/docs/install/build).
 
 # Contributing
 
