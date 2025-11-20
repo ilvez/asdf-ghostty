@@ -9,19 +9,25 @@ on:
 jobs:
   plugin_test:
     name: asdf plugin test
-    runs-on: ubuntu-latest
-    container:
-      image: debian:stable-slim
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: install zig
         uses: mlugg/setup-zig@v2
         with:
           version: 0.14.1
       - name: install ghostty dependencies
-        run: apt-get update && apt-get install -y libgtk-4-dev libadwaita-1-dev gettext libxml2-utils blueprint-compiler
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y libgtk-4-dev libadwaita-1-dev gettext libxml2-utils
+      - name: install blueprint-compiler
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo snap install blueprint-compiler --classic
       - name: run plugin test
         uses: asdf-vm/actions/plugin-test@v4
         with:
           command: ghostty --version
         env:
-          GHOSTTY_BUILD_OPTIONS: "-Demit-themes=false" # NOTE: 1.2.3 packaging is broken atm
+          GHOSTTY_BUILD_OPTIONS: "-Demit-themes=false -fno-sys=gtk4-layer-shell"
