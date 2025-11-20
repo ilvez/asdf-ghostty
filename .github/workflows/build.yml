@@ -9,19 +9,16 @@ on:
 jobs:
   plugin_test:
     name: asdf plugin test
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    container:
+      image: debian:stable-slim
     steps:
       - name: install zig
         uses: mlugg/setup-zig@v2
         with:
           version: 0.14.1
       - name: install ghostty dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install -y libgtk-4-dev libadwaita-1-dev gettext libxml2-utils blueprint-compiler
+        run: apt-get update && apt-get install -y libgtk-4-dev libadwaita-1-dev gettext libxml2-utils blueprint-compiler
       - name: run plugin test
         uses: asdf-vm/actions/plugin-test@v4
         with:
