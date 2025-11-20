@@ -19,9 +19,8 @@
 
 - `bash`, `curl`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html)
 - **Zig compiler** (version-specific to ghostty release)
-- Platform-specific system dependencies (GTK4/libadwaita on Linux, Xcode on macOS). Note: macOS building currently is untested.
-
-For complete build requirements and dependency installation instructions, see the [official ghostty build documentation](https://ghostty.org/docs/install/build).
+- For platform-specific system dependencies see the [official ghostty build documentation](https://ghostty.org/docs/install/build).
+- MacOS build hasn't been tested yet.
 
 # Install
 
