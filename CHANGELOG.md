@@ -1,4 +1,6 @@
 # Changelog
+## Next
+- Populate GHOSTTY_RESOURCES_DIR correctly for themes etc..
 
 ## 1.1.0 (2025-11-20)
 

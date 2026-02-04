@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+if [ -n "$ASDF_INSTALL_PATH" ]; then
+  export GHOSTTY_RESOURCES_DIR="$ASDF_INSTALL_PATH/share/ghostty"
+fi
