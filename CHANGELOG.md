@@ -1,5 +1,7 @@
 # Changelog
-## Next
+## 1.2.0 (2026-03-09)
+- Build from officially bundled sources
+- Check source bundle signatures with minisign
 - Populate GHOSTTY_RESOURCES_DIR correctly for themes etc..
 
 ## 1.1.0 (2025-11-20)
