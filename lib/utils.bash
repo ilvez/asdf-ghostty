@@ -5,6 +5,7 @@ set -euo pipefail
 GH_REPO="https://github.com/ghostty-org/ghostty/"
 TOOL_NAME="ghostty"
 TOOL_TEST="ghostty --version"
+GHOSTTY_MINISIGN_KEY="RWQlAjJC23149WL2sEpT/l0QKy7hMIFhYdQOFy0Z7z7PbneUgvlsnYcV"
 
 fail() {
   echo -e "asdf-$TOOL_NAME: $*"
@@ -12,11 +13,6 @@ fail() {
 }
 
 curl_opts=(-fsSL)
-
-# NOTE: You might want to remove this if ghostty is not hosted on GitHub releases.
-if [ -n "${GITHUB_API_TOKEN:-}" ]; then
-  curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
-fi
 
 sort_versions() {
   sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
@@ -76,11 +72,36 @@ check_zig_version() {
   fi
 }
 
+verify_signature() {
+  local tarball="$1"
+  local minisig_url="$2"
+
+  if ! command -v minisign &>/dev/null; then
+    echo "⚠️  WARNING: minisign not found, skipping signature verification"
+    return 0
+  fi
+
+  local minisig_file
+  minisig_file="$(mktemp)"
+  # shellcheck disable=SC2064 # intentional early expansion
+  trap "rm -f '$minisig_file'" RETURN
+
+  curl -fsSL -o "$minisig_file" "$minisig_url" || {
+    echo "⚠️  WARNING: Could not download signature file from $minisig_url"
+    return 0
+  }
+
+  echo "* Verifying signature..."
+  minisign -Vm "$tarball" -x "$minisig_file" -P "$GHOSTTY_MINISIGN_KEY" ||
+    fail "Signature verification failed! The downloaded file may be corrupted or tampered with."
+}
+
 download_release() {
   local install_type="$1"
   local version="$2"
   local filename="$3"
   local url
+  local minisig_url=""
 
   if [ "$install_type" == "version" ]; then
     if [ "$version" == "latest" ]; then
@@ -88,9 +109,11 @@ download_release() {
     fi
 
     if [ "$version" == "tip" ]; then
-      url="$GH_REPO/archive/refs/tags/${version}.tar.gz"
+      url="${GH_REPO}releases/download/tip/ghostty-source.tar.gz"
+      minisig_url="${url}.minisig"
     else
-      url="$GH_REPO/archive/refs/tags/v${version}.tar.gz"
+      url="https://release.files.ghostty.org/${version}/ghostty-${version}.tar.gz"
+      minisig_url="${url}.minisig"
     fi
   elif [ "$install_type" == "ref" ]; then
     if [[ "$version" =~ ^v[0-9] ]]; then
@@ -105,7 +128,21 @@ download_release() {
   fi
 
   echo "* Downloading $TOOL_NAME $install_type $version..."
-  curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+
+  if ! curl "${curl_opts[@]}" -o "$filename" -C - "$url"; then
+    if [ "$install_type" == "version" ] && [ "$version" != "tip" ]; then
+      echo "⚠️  WARNING: Official tarball not available, falling back to GitHub archive"
+      url="$GH_REPO/archive/refs/tags/v${version}.tar.gz"
+      minisig_url=""
+      curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+    else
+      fail "Could not download $url"
+    fi
+  fi
+
+  if [ -n "$minisig_url" ]; then
+    verify_signature "$filename" "$minisig_url"
+  fi
 }
 
 install_version() {
