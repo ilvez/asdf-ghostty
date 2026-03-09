@@ -14,10 +14,6 @@ fail() {
 
 curl_opts=(-fsSL)
 
-if [ -n "${GITHUB_API_TOKEN:-}" ]; then
-  curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
-fi
-
 sort_versions() {
   sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
     LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
@@ -106,7 +102,6 @@ download_release() {
   local filename="$3"
   local url
   local minisig_url=""
-  local use_auth=true
 
   if [ "$install_type" == "version" ]; then
     if [ "$version" == "latest" ]; then
@@ -119,7 +114,6 @@ download_release() {
     else
       url="https://release.files.ghostty.org/${version}/ghostty-${version}.tar.gz"
       minisig_url="${url}.minisig"
-      use_auth=false
     fi
   elif [ "$install_type" == "ref" ]; then
     if [[ "$version" =~ ^v[0-9] ]]; then
@@ -135,12 +129,7 @@ download_release() {
 
   echo "* Downloading $TOOL_NAME $install_type $version..."
 
-  local dl_opts=(-fsSL)
-  if [ "$use_auth" = true ] && [ -n "${GITHUB_API_TOKEN:-}" ]; then
-    dl_opts+=(-H "Authorization: token $GITHUB_API_TOKEN")
-  fi
-
-  if ! curl "${dl_opts[@]}" -o "$filename" -C - "$url"; then
+  if ! curl "${curl_opts[@]}" -o "$filename" -C - "$url"; then
     if [ "$install_type" == "version" ] && [ "$version" != "tip" ]; then
       echo "⚠️  WARNING: Official tarball not available, falling back to GitHub archive"
       url="$GH_REPO/archive/refs/tags/v${version}.tar.gz"
