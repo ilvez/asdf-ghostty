@@ -7,6 +7,10 @@ on:
       - main
   pull_request:
 
+# TODO: remove once mlugg/setup-zig updates to node24
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   plugin_test:
     name: asdf plugin test
