@@ -163,8 +163,11 @@ install_version() {
     read -ra build_options <<<"$build_options_str"
   fi
 
+  local version_string
+  version_string=$(source_version "$install_type" "$version")
+
   (
-    cd "$ASDF_DOWNLOAD_PATH" && zig build "${default_options[@]}" "${build_options[@]}"
+    cd "$ASDF_DOWNLOAD_PATH" && zig build "${default_options[@]}" "-Dversion-string=$version_string" "${build_options[@]}"
 
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/zig-out/* "$install_path"
@@ -178,4 +181,19 @@ install_version() {
     rm -rf "$install_path"
     fail "An error occurred while installing $TOOL_NAME $version."
   )
+}
+
+source_version() {
+  local install_type="$1"
+  local version="$2"
+
+  local zon_version
+  zon_version=$(sed -n 's/^ *\.version = "\([^"]*\)".*/\1/p' "$ASDF_DOWNLOAD_PATH/build.zig.zon")
+  [ -n "$zon_version" ] || fail "Could not read version from build.zig.zon"
+
+  if [ "$install_type" == "version" ] && [ "$version" != "tip" ]; then
+    echo "$zon_version"
+  else
+    echo "${zon_version}-dev"
+  fi
 }
