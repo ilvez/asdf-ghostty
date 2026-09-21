@@ -58,6 +58,9 @@ ghostty --version
   - Tag: `asdf install ghostty ref:v1.2.3`
   - Commit: `asdf install ghostty ref:abc123`
 
+NOTE: When building ref's, then you probably need blueprint-compiler being available as well. It's not needed when using officially
+released sources.
+
 ## Build Options
 
 You can customize the build by setting the `GHOSTTY_BUILD_OPTIONS` environment variable before installation:
