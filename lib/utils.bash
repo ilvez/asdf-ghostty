@@ -37,13 +37,15 @@ get_required_zig_version() {
   local ghostty_version="$1"
 
   if [ "$ghostty_version" == "tip" ]; then
-    echo "0.15.1"
+    echo "0.16.0"
   elif [[ "$ghostty_version" =~ ^1\.0\. ]]; then
     echo "0.13.0"
   elif [[ "$ghostty_version" =~ ^1\.1\. ]]; then
     echo "0.13.0"
   elif [[ "$ghostty_version" =~ ^1\.2\. ]]; then
     echo "0.14.1"
+  elif [[ "$ghostty_version" =~ ^1\.3\. ]]; then
+    echo "0.15.2"
   else
     echo ""
   fi
