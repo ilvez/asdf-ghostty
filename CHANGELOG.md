@@ -1,4 +1,8 @@
 # Changelog
+## 1.2.1 (2026-10-28)
+- Update to Ghostty 1.4.0 and tip
+- Regular builds to catch zig drift early
+
 ## 1.2.0 (2026-03-09)
 - Build from officially bundled sources
 - Check source bundle signatures with minisign
