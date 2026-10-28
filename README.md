@@ -50,12 +50,12 @@ ghostty --version
 
 ## Version Options
 
-- **Stable releases**: `asdf install ghostty 1.2.3`
+- **Stable releases**: `asdf install ghostty 1.4.0`
 - **`latest`**: Resolves to the most recent stable release tag
 - **`tip`**: Installs from the `tip` tag (development snapshot)
 - **`ref:<reference>`**: Build from any git reference:
   - Branch: `asdf install ghostty ref:main`
-  - Tag: `asdf install ghostty ref:v1.2.3`
+  - Tag: `asdf install ghostty ref:v1.4.0`
   - Commit: `asdf install ghostty ref:abc123`
 
 NOTE: When building ref's, then you probably need blueprint-compiler being available as well. It's not needed when using officially
@@ -68,7 +68,7 @@ You can customize the build by setting the `GHOSTTY_BUILD_OPTIONS` environment v
 ```shell
 # Example: Build with debug optimization and without themes:
 export GHOSTTY_BUILD_OPTIONS="-Doptimize=Debug -Demit-themes=false"
-asdf install ghostty 1.2.3
+asdf install ghostty 1.4.0
 ```
 
 The plugin uses these default options: `-Doptimize=ReleaseFast -fsys=fontconfig`
