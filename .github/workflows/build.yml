@@ -6,6 +6,8 @@ on:
     branches:
       - main
   pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
 
 # TODO: remove once mlugg/setup-zig updates to node24
 env:
@@ -13,17 +15,26 @@ env:
 
 jobs:
   plugin_test:
-    name: asdf plugin test
+    name: asdf plugin test (${{ matrix.version }})
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest
+        version:
+          - latest
+          - tip
+        include:
+          - version: latest
+            zig: 0.17.0
+          - version: tip
+            zig: 0.17.0
     runs-on: ${{ matrix.os }}
     steps:
       - name: install zig
         uses: mlugg/setup-zig@v2
         with:
-          version: 0.17.0
+          version: ${{ matrix.zig }}
       - name: install ghostty dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get update && sudo apt-get install -y libgtk-4-dev libadwaita-1-dev gettext libxml2-utils minisign
@@ -31,5 +42,6 @@ jobs:
         uses: asdf-vm/actions/plugin-test@v4
         with:
           command: ghostty --version
+          version: ${{ matrix.version }}
         env:
           GHOSTTY_BUILD_OPTIONS: "-Demit-themes=false -fno-sys=gtk4-layer-shell"
