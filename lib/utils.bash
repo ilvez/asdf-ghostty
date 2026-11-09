@@ -21,8 +21,9 @@ sort_versions() {
 
 list_github_tags() {
   git ls-remote --tags --refs "$GH_REPO" |
-    grep -o 'refs/tags/.*' | cut -d/ -f3- |
-    sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+    # KLUDGE: upstream also tags libghostty-vt releases as vt-X.Y.Z; only app tags (vN...) and tip are versions
+    grep -oE 'refs/tags/(v[0-9].*|tip)$' | cut -d/ -f3- |
+    sed 's/^v//'
 }
 
 list_all_versions() {
