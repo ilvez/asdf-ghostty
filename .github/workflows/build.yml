@@ -28,7 +28,7 @@ jobs:
           - version: latest
             zig: 0.17.0
           - version: tip
-            zig: 0.17.0
+            zig: 0.17.1
     runs-on: ${{ matrix.os }}
     steps:
       - name: install zig
